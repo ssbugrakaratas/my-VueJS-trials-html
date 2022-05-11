@@ -51,6 +51,13 @@
             <custom-form/>
         </div>
 
+        <hr>
+
+        <div>
+            <span> Bu Bir For Denemesidir...</span>
+            <p v-for="(i,index) in test_loop">#{{index}}--{{i}}</p>
+        </div>
+
 
     </div>
     <script src="https://unpkg.com/vue@next"></script>
@@ -61,7 +68,8 @@
                     title: 'Ben Bir Vue.js return objesiyim!',
                     if_status: false,
                     else_if_status: true,
-                    show_status: true
+                    show_status: true,
+                    test_loop: ["itemA", "itemB", "itemC"],
                 }
             },
             methods: {
