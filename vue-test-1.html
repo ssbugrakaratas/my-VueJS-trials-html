@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+    <style>
+        [v-cloak] {
+            
+            background-color: black;
+        }
+    </style>
+
+
+    <head>
+        <title>Baslik</title>
+    </head>
+    <body >
+        <div style="text-align: center;background-color: rgb(0, 247, 255); padding: 10px;">
+            Selam Bu Bir Vue3.js Testidir.
+        </div>
+
+        <hr>
+
+        <div id="app" v-cloak>
+            <h1>{{title}}</h1>
+            <div class="row">
+                    <input type="text" @keyup.enter="title_changer(new_title)" v-model="new_title">
+            </div>
+            <hr>
+            <div v-if="if_status">
+                <span style=" background-color: red;"> if_status Değerine Göre Bu Yaziyi Görünür Yapiyoruz.</span>
+            </div>
+            <div v-else-if="else_if_status">
+                <span style=" background-color: red;"> else_if_status Değerine Göre Bu Yaziyi Görünür Yapiyoruz.</span>
+            </div>
+            <div v-else>
+                <span style=" background-color: red;"> v-else Değerine Göre Bu Yaziyi Görünür Yapiyoruz.</span>
+            </div>
+            <hr>
+            <div class="buttons">
+                <button style="padding: 5px;margin: 5px;" v-on:click="if_status = !if_status"> If Status Changer</button>
+                <button style="padding: 5px;margin: 5px;" v-on:click="else_if_status = !else_if_status"> Else_if Status Changer</button>
+                <button style="padding: 5px;margin: 5px;" @click="show_status_changer"> Show Status Changer</button>
+            </div>
+            <hr>
+
+            <div v-show="show_status">
+                <span style=" background-color: rgb(0, 255, 34);"> show_status Değerine Göre Bu Yaziyi Görünür Yapiyoruz.</span>
+            </div>
+
+            <hr>
+
+            <div>
+                <custom-form/>
+            </div>
+
+
+        </div>
+        <script src="https://unpkg.com/vue@next"></script>
+        <script>
+            let app = Vue.createApp({
+                data: function(){
+                    return{ title : 'Ben Bir Vue.js return objesiyim!',
+                            if_status: false,
+                            else_if_status: true,
+                            show_status: true
+                    }
+                },
+                methods: {
+                    show_status_changer(){
+                        this.show_status = !this.show_status;
+                    },
+                    title_changer(new_title){
+                        this.title = new_title + "\tguncellendi";
+                    },
+                },
+            })
+
+            app.component('custom-form',{
+                template : `
+                    <form @submit.prevent="form_submit">
+                        <h2>{{title}}</h2>
+                        <input style="margin:10px;" type="email" v-model="email" />
+                        <input style="margin:10px;" type="password" v-model="password" />
+                        <button type="submit"> Onayla </button>
+                        <div class="row" v-if="msg">
+                            <span style="white-space: pre-line;">{{msg}}</span>
+                        </div>
+                    </form>    
+                `,
+                data() {
+                    return {
+                        title:"LOGIN FORM",
+                        msg : "",
+                        email :"",
+                        password :"",
+                    }
+                },
+                methods: {
+                    form_submit(){
+                        this.msg=`Form Onaylandi. Giriş Yapan Bilgileri;\n${this.email}\n${this.password}`
+                    }
+                },
+            })
+
+
+            app.mount('#app')
+        </script>
+    </body>
+    
+</html>
