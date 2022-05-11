@@ -77,20 +77,23 @@
                 template : `
                     <form @submit.prevent="form_submit">
                         <h2>{{title}}</h2>
-                        <input style="margin:10px;" type="email" v-model="email" />
-                        <input style="margin:10px;" type="password" v-model="password" />
+                        <custom-input :label="label_email" v-model="email" />
+                        <custom-input :label="label_password" v-model="password" />
                         <button type="submit"> Onayla </button>
                         <div class="row" v-if="msg">
                             <span style="white-space: pre-line;">{{msg}}</span>
                         </div>
                     </form>    
                 `,
+                components : ['custom-input'],
                 data() {
                     return {
                         title:"LOGIN FORM",
                         msg : "",
                         email :"",
                         password :"",
+                        label_email:"Email:",
+                        label_password:"Password:"
                     }
                 },
                 methods: {
@@ -100,6 +103,25 @@
                 },
             })
 
+            app.component('custom-input',{
+                template:`
+                    <label>
+                        {{ label }}
+                        <input type="text" style="margin:10px;" v-model="input_value">
+                    </label>
+                    `,
+                props:['label' , 'modelValue'],
+                computed:{
+                    input_value:{
+                        get(){
+                            return this.modelValue
+                        },
+                        set(value){
+                            this.$emit('update:modelValue', value)
+                        }
+                    }
+                },
+            })
 
             app.mount('#app')
         </script>
