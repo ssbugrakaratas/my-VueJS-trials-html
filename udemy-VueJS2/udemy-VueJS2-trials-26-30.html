@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<style>
+    [v-cloak] {
+        background-color: black;
+    }
+</style>
+
+<head>
+    <title>Udemy-Başlik</title>
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <h1 v-once>{{ title }}</h1>
+        <p>COUNT2: {{count2}}</p>
+
+        <div>
+            <input type="text" v-model="title">
+            <p>{{title}}</p>
+        </div>
+
+        <div>
+            <button style="margin: 25px; height: 25px;  width: 25px;" v-on:click="decrease_counter">-</button>
+            <span>{{count}}</span>
+            <button style="margin: 25px; height: 25px;  width: 25px;" v-on:click="increase_counter">+</button>
+        </div>
+        <div>
+            <button style="margin: 25px;" v-on:click="increase_counter2">+(ikinci)</button>
+            <p>{{result()}}</p>
+        </div>
+        <div>
+            <p>{{result2}}</p>
+        </div>
+
+    </div>
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<script>
+    new Vue({
+        el: "#app",
+        data: {
+            title: " selam",
+            count: 0,
+            count2: 3,
+
+        },
+        //methods datalardan herhangi birisinin değişmesi durumunda çalışan fonksiyon
+        methods: {
+            increase_counter: function() {
+                console.log("incr")
+                this.count += 1
+                return this.count
+            },
+            decrease_counter: function() {
+                if (this.count > 0) {
+                    console.log("decres")
+                    this.count -= 1
+                    return this.count
+                } else {
+                    return this.count
+                }
+            },
+            increase_counter2: function() {
+                console.log("incr2")
+                this.count2 += 1
+                return this.count2
+            },
+            result: function() {
+                console.log("result")
+                return this.count > 5 ? "5ten büyüktür." : "5ten küçük"
+            }
+        },
+        //computed yalnızca fonksiyon içerisindeki datada değişiklik olursa çalışan fonksiyon 
+        computed: {
+            result2: function() {
+                console.log("result2")
+                return this.count2 > 5 ? "5ten büyüktür.2" : "5ten küçük2"
+            }
+        },
+        //data ile aynı isimle fonksiyon tanımlanırsa o ismi taşıyan datanın değişmesi ile devreye girer.
+        //data async çalışma imkanı verir
+        watch: {
+            count: function(value) {
+                console.log("watch çalıştı");
+                self = this
+
+                Swal.fire({
+                    position: 'center',
+                    icon: 'success',
+                    title: 'count2 yi async olarak 999 yapıyorum az bekle',
+                    showConfirmButton: false,
+                    timer: 5000
+                })
+                setTimeout(function() {
+                    self.count2 = 999
+                }, 1000)
+            }
+        }
+    });
+</script>
+
+</html>
