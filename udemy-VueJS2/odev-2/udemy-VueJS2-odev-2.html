@@ -12,13 +12,20 @@
 
 <body>
     <div id="app" v-cloak>
-        <h1>Ödev-1</h1>
-        <p v-once>{{name}} - {{age}}</p>
-        <p>{{age_carpan()}}</p>
-        <p>0-1 arasi rastgele sayi : {{rand_sayi()}}</p>
-        <img style="height:50px ; width: 50px;" :src="image"></img>
-        <p>{{input_text}}</p>
-        <input type="text" v-model="input_text">
+        <h1>Ödev-2</h1>
+        <hr>
+        <div class="alert_buton">
+            <button v-on:click="show_alert">Alert aç</button>
+        </div>
+        <hr>
+        <div class="yazarken_goster">
+            <p style="height: 10px;">{{input_value}}</p>
+            <input v-on:keydown="yazarken($event)" type="text" placeholder="sen yazarken üste yazacak">
+        </div>
+        <hr>
+        <div class="yazarken_goster">
+            <input v-on:keydown.enter="enter_basinca($event)" type="text" placeholder="sen yazdıktan sonra alerte basacak yazdığını">
+        </div>
     </div>
 </body>
 
@@ -27,22 +34,18 @@
     new Vue({
         el: "#app",
         data: {
-            name: "Bugra",
-            age: 23,
-            input_text: "weewew",
-            image: "https://img.freepik.com/free-vector/broken-frosted-glass-realistic-icon_1284-12125.jpg?w=2000"
+            input_value: "",
         },
         methods: {
-            name_changer: function(input_text) {
-                return this.name = input_text;
+            show_alert: function() {
+                alert()
             },
-            age_carpan: function() {
-                let age_carpim = this.age * 5;
-                return age_carpim
+            yazarken: function(event) {
+                return this.input_value = event.target.value
             },
-            rand_sayi: function() {
-                return Math.random(0, 1).toFixed(3)
-            },
+            enter_basinca: function(event) {
+                return alert(event.target.value)
+            }
         },
     });
 </script>
