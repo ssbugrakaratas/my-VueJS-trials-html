@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<style>
+    [v-cloak] {
+        background-color: black;
+    }
+</style>
+
+<head>
+    <title>Udemy-Başlik</title>
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <h1 v-once>{{ title }}</h1>
+        <p>{{ title_changer() }}</p>
+        <p v-html="html_variable"></p>
+    </div>
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+    new Vue({
+        el: "#app",
+        data: {
+            title: " selam",
+            html_variable: "<a href='http://google.com'> Google </a>",
+        },
+        methods: {
+            title_changer: function() {
+                this.title = "fonksiyon";
+                return this.title;
+            },
+        },
+    });
+</script>
+
+</html>

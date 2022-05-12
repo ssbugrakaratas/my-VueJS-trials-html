@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Odev-1 | Udemy-Başlik</title>
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <h1>Ödev-1</h1>
+        <p v-once>{{name}} - {{age}}</p>
+        <p>{{age_carpan()}}</p>
+        <p>0-1 arasi rastgele sayi : {{rand_sayi()}}</p>
+        <img style="height:50px ; width: 50px;" :src="image"></img>
+        <p>{{input_text}}</p>
+        <input type="text" v-model="input_text">
+    </div>
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+    new Vue({
+        el: "#app",
+        data: {
+            name: "Bugra",
+            age: 23,
+            input_text: "weewew",
+            image: "https://img.freepik.com/free-vector/broken-frosted-glass-realistic-icon_1284-12125.jpg?w=2000"
+        },
+        methods: {
+            name_changer: function(input_text) {
+                return this.name = input_text;
+            },
+            age_carpan: function() {
+                let age_carpim = this.age * 5;
+                return age_carpim
+            },
+            rand_sayi: function() {
+                return Math.random(0, 1).toFixed(3)
+            },
+        },
+    });
+</script>
+
+</html>
