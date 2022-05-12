@@ -13,8 +13,21 @@
 <body>
     <div id="app" v-cloak>
         <h1>Ödev-3</h1>
+        <p>Özetle 33 değerine gelince tamam yazıp değeri async olarak belirlenen süre kadar sonra sıfırlayacak</p>
         <hr>
-
+        <div>
+            <p>value 33'e eşit olduğunda result olarak tamamlandı yazacak</p>
+            <p>Anlık Değer : {{value}}</p>
+            <button @click="value+=5">5 ekle</button>
+            <button @click="value+=1">1 ekle</button>
+            <button @click="value-=1">1 çıkar</button>
+            <p>{{result}}</p>
+        </div>
+        <hr>
+        <div>
+            <p>result değeri değiştikten 'inputa girilen süre kadar' sonra value değeri sıfırlanacak</p>
+            <input type="text" v-model="input_value">
+        </div>
     </div>
 </body>
 
@@ -23,11 +36,24 @@
     new Vue({
         el: "#app",
         data: {
-            input_value: "",
+            input_value: 5000,
+            value: 0,
         },
-        methods: {
-
+        computed: {
+            result: function() {
+                console.log("computed result çalıştı")
+                return this.value == 33 ? "tamamlandi" : ""
+            }
         },
+        watch: {
+            result: function(value) {
+                console.log("watch result çalıştı.")
+                self = this
+                setTimeout(function() {
+                    self.value = 0
+                }, this.input_value)
+            }
+        }
     });
 </script>
 
