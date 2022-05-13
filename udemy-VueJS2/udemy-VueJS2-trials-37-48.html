@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<style>
+    [v-cloak] {
+        background-color: black;
+    }
+</style>
+
+<head>
+    <title>Udemy-Başlik</title>
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <h1 v-once>{{ title }}</h1>
+        <p>if için kullanılan show değeri : {{show}}</p>
+        <button @click="show=!show">göster/gizle</button>
+        <p v-if="show">Ben if aktif olduğunda görünen bir yazıyım.</p>
+        <p v-else>Ben if pasif olduğunda görünen bir yazıyım.</p>
+        <hr>
+        <p>V-show un v-if ten farkı v-show her zaman renderlanıyor style= display:none ekleyerek görünmez yapıyor. </p>
+        <p v-show="show">bende v-if yerine v-show ile görünen bir yazıyım.</p>
+        <hr>
+
+        <div class="for_kullanimi">
+            <ul>
+                <li v-for="i,index in liste">
+                    #{{index}} - {{i}}
+                </li>
+            </ul>
+        </div>
+        <hr>
+        <template v-for="i,index in liste">
+            <ul style="border: 2px solid black;">
+                <li>
+                    #{{index}} - {{i}}
+                </li>
+            </ul>
+        </template>
+        <hr>
+        <ul>
+            <li v-for="x in object_array" :key="x.id">
+                <strong>{{x.name}} :</strong> {{x.sayi}}
+                <ul>
+                    <li v-for="(value, key,index) in x">
+                        <strong>#{{index}}---{{key}} :</strong> {{value}}
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <button @click="object_array.push({name:'aaaaa',sayi:999})">Ekle</button>
+        <hr>
+        <span v-for="k in 10"> {{ k }} </span>
+
+    </div>
+
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+<script>
+    new Vue({
+        el: "#app",
+        data: {
+            title: " selam",
+            show: true,
+            liste: ["itemA", "itemB", "itemC"],
+            object_array: [{
+                id: 1,
+                name: "bugra",
+                sayi: 10
+            }, {
+                id: 2,
+                name: "ali",
+                sayi: 15
+            }, {
+                id: 3,
+                name: "veli",
+                sayi: 25
+            }, {
+                id: 4,
+                name: "kemal",
+                sayi: 55
+            }, ]
+
+        },
+        //methods datalardan herhangi birisinin değişmesi durumunda çalışan fonksiyon
+        methods: {
+
+        },
+        //computed yalnızca fonksiyon içerisindeki datada değişiklik olursa çalışan fonksiyon 
+        computed: {
+
+        },
+        //data ile aynı isimle fonksiyon tanımlanırsa o ismi taşıyan datanın değişmesi ile devreye girer.
+        //async çalışma imkanı verir
+        watch: {
+
+        }
+    });
+</script>
+
+</html>
