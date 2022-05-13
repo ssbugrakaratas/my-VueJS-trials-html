@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+<style>
+    [v-cloak] {
+        background-color: black;
+    }
+    
+    div.karakter_isimleri {
+        text-align: center;
+        font-size: 25px;
+    }
+    
+    .navbar-header {
+        float: left;
+        padding: 15px;
+        text-align: center;
+        width: 100%;
+    }
+</style>
+
+<head>
+    <title>Udemy-Proje1 kursa başlamadan deneme</title>
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">{{title}}</a>
+            </div>
+        </nav>
+
+        <div class="container can_bar">
+            <div class="row">
+                <div class="col karakter_isimleri">
+                    Oyuncu
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" :style="{'width': oyuncu_can +'%' }">
+                            % {{oyuncu_can}}
+                        </div>
+                    </div>
+                </div>
+                <div class="col karakter_isimleri">
+                    Canavar
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" :style="{'width': canavar_can +'%'}">
+                            % {{canavar_can}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="buton_panel mt-3">
+            <div class="card bg-secondary">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col">
+                            <button @click="saldir()" class="btn btn-danger">SALDIR</button>
+                        </div>
+                        <div class="col">
+                            <button @click="saldir('ozel_saldiri')" class="btn btn-warning">ÖZEL SALDIR</button>
+                        </div>
+                        <div class="col">
+                            <button @click="ilk_yardim()" class="btn btn-success">İLK YARDIM</button>
+                        </div>
+                        <div class="col">
+                            <button @click="pes_et()" class="btn btn" style="background-color: rgb(151, 151, 151)">PES ET!</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div v-if="log.length" class="log_kaydi mt-3">
+            <div class="container">
+                <div class="card">
+                    <div class="card-header" style="text-align: center">Log Kaydı</div>
+                    <div class="card-body">
+                        <template v-for="(items, index) in log">
+                <p :style="custom_style(items.islem_yapan)">
+                  #{{index}} -
+                  <span>{{items.islem_yapan}} : {{items.detay}}
+                    <span v-if="items.hasar">({{items.hasar}})<i class="bi bi-droplet-half" style="color: red"></i>
+                    </span>
+                    <span v-else-if="items.eklenen_can">(+{{items.eklenen_can}})<i class="bi bi-bandaid"></i>
+                    </span>
+                  </span>
+                </p>
+              </template>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous" />
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css" />
+
+<script>
+    new Vue({
+        el: "#app",
+        data: {
+            title: "Canavar Oyunu Kursa Başlamadan Deneme",
+            oyuncu_can: 100,
+            canavar_can: 100,
+            log: [],
+        },
+        //methods datalardan herhangi birisinin değişmesi durumunda çalışan fonksiyon
+        methods: {
+            saldir: function(saldiri_tipi) {
+                console.log("saldir_calıştı")
+
+                if (saldiri_tipi == "ozel_saldiri") {
+                    var sayi = Math.floor(Math.random() * 50) + 1
+                    this.canavar_can -= sayi
+                    this.log.push({
+                        islem_yapan: "oyuncu",
+                        detay: "özel saldırdın",
+                        hasar: sayi
+                    })
+                } else {
+                    var sayi = Math.floor(Math.random() * 20) + 1
+                    this.canavar_can -= sayi
+                    this.log.push({
+                        islem_yapan: "oyuncu",
+                        detay: "saldırdın",
+                        hasar: sayi
+                    })
+                }
+                this.canavar_saldirisi()
+                return this.canavar_can
+            },
+            canavar_saldirisi: function() {
+                console.log("canavar_saldır_çalıştı")
+                var sayi = Math.floor(Math.random() * 20) + 1
+                this.oyuncu_can -= sayi
+                this.log.push({
+                    islem_yapan: "canavar",
+                    detay: "saldırdı",
+                    hasar: sayi
+                })
+                return this.oyuncu_can
+            },
+            ilk_yardim: function() {
+                console.log("ilk_yardım_çalıştı")
+                var can = Math.floor(Math.random() * 20) + 1
+                this.oyuncu_can += can
+                this.log.push({
+                    islem_yapan: "oyuncu",
+                    detay: "can bastın",
+                    eklenen_can: can
+                })
+                if (this.oyuncu_can > 100) {
+                    this.oyuncu_can = 100
+                    this.canavar_saldirisi()
+                    return this.oyuncu_can
+                }
+                this.canavar_saldirisi()
+                return this.oyuncu_can
+            },
+            pes_et: function() {
+                console.log("pest_et çalıştı")
+                window.location.reload()
+            },
+            custom_style: function(saldiran) {
+                var renk = {}
+                if (saldiran == 'oyuncu') {
+                    renk = {
+                        'background-color': "lightgreen"
+                    }
+                } else {
+                    renk = {
+                        'background-color': "red"
+                    }
+                }
+                return renk
+            }
+        },
+        //computed yalnızca fonksiyon içerisindeki datada değişiklik olursa çalışan fonksiyon
+        computed: {
+
+        },
+        //data ile aynı isimle fonksiyon tanımlanırsa o ismi taşıyan datanın değişmesi ile devreye girer.
+        //async çalışma imkanı verir
+        watch: {
+            canavar_can: function() {
+                self = this;
+                if (self.canavar_can < 0) {
+                    self.canavar_can = 0
+                    alert("canavar öldü")
+                }
+            },
+            oyuncu_can: function() {
+                self = this;
+                if (self.oyuncu_can < 0) {
+                    self.oyuncu_can = 0
+                    alert("oyuncu öldü")
+                }
+            },
+        },
+    });
+</script>
+
+</html>

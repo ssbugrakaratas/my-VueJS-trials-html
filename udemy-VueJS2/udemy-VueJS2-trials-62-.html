@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<style>
+    [v-cloak] {
+        background-color: black;
+    }
+</style>
+
+<head>
+    <title>Udemy-Başlik</title>
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <h1 v-once>{{ title }}</h1>
+
+    </div>
+
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+<script>
+    new Vue({
+        el: "#app",
+        data: {
+            title: " selam",
+        },
+        //methods datalardan herhangi birisinin değişmesi durumunda çalışan fonksiyon
+        methods: {},
+        //computed yalnızca fonksiyon içerisindeki datada değişiklik olursa çalışan fonksiyon 
+        computed: {},
+        //data ile aynı isimle fonksiyon tanımlanırsa o ismi taşıyan datanın değişmesi ile devreye girer.
+        //data async çalışma imkanı verir
+        watch: {}
+    });
+</script>
+
+</html>

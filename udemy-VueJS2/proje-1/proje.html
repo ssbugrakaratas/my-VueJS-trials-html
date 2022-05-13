@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+<style>
+    .text-center {
+        text-align: center;
+    }
+    
+    .healthbar {
+        width: 100%;
+        height: 40px;
+        background-color: #eee;
+        margin: auto;
+        transition: width 500ms;
+    }
+    
+    .controls,
+    .log {
+        margin-top: 30px;
+        text-align: center;
+        padding: 10px;
+        border: 1px solid #ccc;
+        box-shadow: 0px 3px 6px #ccc;
+    }
+    
+    .turn {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        font-weight: bold;
+        font-size: 22px;
+    }
+    
+    .log ul {
+        list-style: none;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+    
+    .log ul li {
+        margin: 5px;
+    }
+    
+    .log ul .player-turn {
+        color: blue;
+        background-color: #e4e8ff;
+    }
+    
+    .log ul .monster-turn {
+        color: red;
+        background-color: #ffc0c1;
+    }
+    
+    button {
+        font-size: 20px;
+        background-color: #eee;
+        padding: 12px;
+        box-shadow: 0 1px 1px black;
+        margin: 10px;
+    }
+    
+    #start-game {
+        background-color: #aaffb0;
+    }
+    
+    #start-game:hover {
+        background-color: #76ff7e;
+    }
+    
+    #attack {
+        background-color: #ff7367;
+    }
+    
+    #attack:hover {
+        background-color: #ff3f43;
+    }
+    
+    #special-attack {
+        background-color: #ffaf4f;
+    }
+    
+    #special-attack:hover {
+        background-color: #ff9a2b;
+    }
+    
+    #heal {
+        background-color: #aaffb0;
+    }
+    
+    #heal:hover {
+        background-color: #76ff7e;
+    }
+    
+    #give-up {
+        background-color: #ffffff;
+    }
+    
+    #give-up:hover {
+        background-color: #c7c7c7;
+    }
+</style>
+
+<head>
+    <title>Canavar Avı</title>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+</head>
+
+<body>
+    <div id="app">
+        <section class="row">
+            <div class="small-6 columns">
+                <h1 class="text-center">SEN</h1>
+                <div class="healthbar">
+                    <div :style="player_progress" class="healthbar text-center" style="background-color: green; margin: 0; color: white;">
+                        {{ player_heal }}%
+                    </div>
+                </div>
+            </div>
+            <div class="small-6 columns">
+                <h1 class="text-center">CANAVAR</h1>
+                <div class="healthbar">
+                    <div :style="monster_progress" class="healthbar text-center" style="background-color: green; margin: 0; color: white;">
+                        {{ monster_heal }}%
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="row controls" v-if="!game_is_on">
+            <div class="small-12 columns">
+                <button id="start-game" @click="start_game">YENİ OYUN</button>
+            </div>
+        </section>
+
+        <section class="row controls" v-if="game_is_on">
+            <div class="small-12 columns">
+                <button id="attack" @click="attack">SALDIRI</button>
+                <button id="special-attack" @click="special_attack">ÖZEL SALDIRI</button>
+                <button id="heal" @click="heal_up">İLK YARDIM</button>
+                <button id="give-up" @click="give_up">PES ET!</button>
+            </div>
+        </section>
+
+        <section class="row log" v-if="logs.length > 0">
+            <div class="small-12 columns">
+                <ul>
+                    <li :class="{ 'player-turn' : log.turn == 'p', 'monster-turn' : log.turn == 'm' }" v-for="log in logs"> {{ log.text }}</li>
+                </ul>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        new Vue({
+            el: "#app",
+            data: {
+                player_heal: 100,
+                monster_heal: 100,
+                logs: [],
+                game_is_on: false,
+                attack_multiple: 10,
+                special_attack_multiple: 25,
+                heal_up_multiple: 20,
+                monster_attack_multiple: 25,
+                log_text: {
+                    attack: "OYUNCU ATAĞI :",
+                    special_attack: "ÖZEL OYUNCU ATAĞI : ",
+                    monster_attack: "CANAVAR ATAĞI : ",
+                    heal_up: "İLK YARDIM",
+                    give_up: "OYUNCU PES ETTİ!!!"
+                },
+            },
+            methods: {
+                start_game: function() {
+                    this.game_is_on = true;
+                },
+                attack: function() {
+                    var point = Math.ceil(Math.random() * this.attack_multiple);
+                    this.monster_heal -= point;
+                    this.add_to_log({
+                        turn: "p",
+                        text: this.log_text.attack + point
+                    })
+                    this.monster_attack();
+                },
+                special_attack: function() {
+                    var point = Math.ceil(Math.random() * this.special_attack_multiple);
+                    this.monster_heal -= point;
+                    this.add_to_log({
+                        turn: "p",
+                        text: this.log_text.special_attack + point
+                    })
+                    this.monster_attack();
+                },
+                heal_up: function() {
+                    var point = Math.ceil(Math.random() * this.heal_up_multiple);
+                    this.player_heal += point;
+                    this.add_to_log({
+                        turn: "p",
+                        text: this.log_text.heal_up + point
+                    })
+                    this.monster_attack();
+                },
+                give_up: function() {
+                    this.player_heal = 0;
+                    this.add_to_log({
+                        turn: "p",
+                        text: this.log_text.give_up
+                    })
+                },
+                monster_attack: function() {
+                    var point = Math.ceil(Math.random() * this.monster_attack_multiple);
+                    this.player_heal -= point;
+                    this.add_to_log({
+                        turn: "m",
+                        text: this.log_text.monster_attack + point
+                    })
+                },
+                add_to_log: function(log) {
+                    this.logs.push(log);
+                }
+            },
+            watch: {
+                player_heal: function(value) {
+                    if (value <= 0) {
+                        this.player_heal = 0;
+                        if (confirm("Oyunu KAYBETTİN. Tekrar denemek ister misin?")) {
+                            this.player_heal = 100;
+                            this.monster_heal = 100;
+                            this.logs = [];
+                        }
+                    } else if (value >= 100) {
+                        this.player_heal = 100
+                    }
+                },
+                monster_heal: function(value) {
+                    if (value <= 0) {
+                        this.monster_heal = 0;
+                        if (confirm("Oyunu KAZANDIN. Tekrar denemek ister misin?")) {
+                            this.player_heal = 100;
+                            this.monster_heal = 100;
+                            this.logs = [];
+                        }
+                    }
+                }
+            },
+            computed: {
+                player_progress: function() {
+                    return {
+                        width: this.player_heal + "%"
+                    }
+                },
+                monster_progress: function() {
+                    return {
+                        width: this.monster_heal + "%"
+                    }
+                }
+            }
+        })
+    </script>
+</body>
+
+</html>
