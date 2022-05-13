@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<style>
+    [v-cloak] {
+        background-color: black;
+    }
+    
+    .box {
+        height: 100px;
+        width: 100px;
+        background-color: gray;
+        display: inline-block;
+        margin: 10px;
+    }
+    
+    .yellow {
+        background-color: yellow;
+    }
+    
+    .red {
+        background-color: red;
+    }
+    
+    .green {
+        background-color: green;
+    }
+</style>
+
+<head>
+    <title>Udemy-Başlik</title>
+</head>
+
+<body>
+    <div id="app" v-cloak>
+        <h1 v-once>{{ title }}</h1>
+        <div @click="bool_class = !bool_class" :class="{red: bool_class}" class="box"></div>
+        <div @click="bool_class = !bool_class" :class="{yellow: bool_class}" class="box"></div>
+        <div @click="bool_class = !bool_class" :class="{green: bool_class}" class="box"></div>
+        <hr>
+        <div class="box" :style="{'background-color': bg_color}"></div>
+        <div class="box" :style="custom_style"></div>
+        <div class="box" :style=""></div>
+        <div>
+            <input type="text" v-model="bg_color">
+        </div>
+
+    </div>
+
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+<script>
+    new Vue({
+        el: "#app",
+        data: {
+            title: " selam",
+            bool_class: false,
+            bg_color: "green"
+
+        },
+        //methods datalardan herhangi birisinin değişmesi durumunda çalışan fonksiyon
+        methods: {
+
+        },
+        //computed yalnızca fonksiyon içerisindeki datada değişiklik olursa çalışan fonksiyon 
+        computed: {
+            custom_style: function() {
+                return {
+                    'background-color': "red"
+                }
+            }
+        },
+        //data ile aynı isimle fonksiyon tanımlanırsa o ismi taşıyan datanın değişmesi ile devreye girer.
+        //data async çalışma imkanı verir
+        watch: {
+
+        }
+    });
+</script>
+
+</html>
