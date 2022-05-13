@@ -13,8 +13,45 @@
 <body>
     <div id="app" v-cloak>
         <h1>Ödev-5</h1>
+        <!-- Soru1 -->
+        <button @click="show=!show">göster/gizle</button>
+        <p v-if="show">Ben if aktif olduğunda görünen bir yazıyım.</p>
+        <p v-else>Ben if pasif olduğunda görünen bir yazıyım.</p>
+        <hr>
+        <p v-show="show">bende v-if yerine v-show ile görünen bir yazıyım.</p>
+        <hr>
+        <!-- Soru2 -->
+        <ul>
+            <li v-for="(items, index) in array">
+                <strong>#{{index}}:</strong> {{items}}
+            </li>
+        </ul>
+        <hr>
+        <!-- Soru3 -->
+        <ul>
+            <li v-for="(value, key, index) in customObject">
+                <strong>#{{index}}---{{key}}:</strong> {{value}}
+            </li>
+        </ul>
+        <hr>
+        <!-- Soru4 -->
+        <ul>
+            <li v-for="(value, key, index) in testData">
 
-
+                <strong>#{{index}}---{{key}}:</strong>
+                <template v-if="!(Array.isArray(value))">
+                    {{value}}
+                </template>
+                <template v-else> 
+                    <ul>
+                        <li v-for="sayi in value">
+                            {{sayi}}
+                        </li>
+                    </ul>
+                </template>
+            </li>
+        </ul>
+        <hr>
 
     </div>
 </body>
@@ -24,7 +61,18 @@
     new Vue({
         el: "#app",
         data: {
-            title: "",
+            show: true,
+            array: ['Gökhan', 'Defne', 'Berk', 'Özge'],
+            customObject: {
+                title: 'Game of Thrones',
+                author: 'George R.R',
+                books: '7'
+            },
+            testData: {
+                name: 'NesnedLoop',
+                id: 10,
+                data: [3, 45, 19, 14.02, 20.30, 20.18]
+            }
         },
         methods: {
 
